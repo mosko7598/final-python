@@ -19,18 +19,7 @@ jobs:
 
     - name: Generate serial number
       id: serial
-      run: echo "::set-output name=num::$(date +%Y%m%d%H%M%S)"
-
-    - name: Build Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        load: true
-        tags: ${{ secrets.DOCKER_REPO_NAME }}:${{ steps.serial.outputs.num }}
-
-    - name: Test container
-      run: |
-        docker run ${{ secrets.DOCKER_REPO_NAME }}:${{ steps.serial.outputs.num }} python -c "print('Container test successful')"
+      run: echo "num=$(date +%Y%m%d%H%M%S)" >> $GITHUB_OUTPUT
 
     - name: Login to DockerHub
       uses: docker/login-action@v1
@@ -38,11 +27,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Push to DockerHub
+    - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
         context: .
         push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:${{ steps.serial.outputs.num }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:${{ steps.serial.outputs.num }}
+
+    - name: Test container
+      run: |
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:${{ steps.serial.outputs.num }}
+        docker run ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:${{ steps.serial.outputs.num }} python -c "print('Container test successful')"

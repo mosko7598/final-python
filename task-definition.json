@@ -4,7 +4,7 @@
         {
             "name": "final_python",
             "image": "mosko/final_python:latest",
-            "cpu": 2500,
+            "cpu": 3500,
             "memory": 4600,
             "memoryReservation": 4500,
             "portMappings": [

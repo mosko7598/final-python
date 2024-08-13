@@ -1,0 +1,37 @@
+{
+    "family": "mosko_final_python_task_definition",
+    "containerDefinitions": [
+        {
+            "name": "final_python",
+            "image": "mosko/final_python:latest",
+            "cpu": 2500,
+            "memory": 4600,
+            "memoryReservation": 4500,
+            "portMappings": [
+                {
+                    "name": "5000",
+                    "containerPort": 5000,
+                    "hostPort": 5000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "systemControls": []
+        }
+    ],
+    "executionRoleArn": "arn:aws:iam::199051453468:role/ecsTaskExecutionRole",
+    "networkMode": "bridge",
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "5500",
+    "memory": "8000",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
+}
